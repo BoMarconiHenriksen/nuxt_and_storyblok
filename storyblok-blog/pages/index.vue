@@ -19,7 +19,17 @@ export default {
   components: {
     PostPreview
   },
-  data() {
+  asyncData(context) {
+    return context.app.$storyapi
+    .get('cdn/stories', {
+      version: 'draft',
+      starts_with: 'blog/'
+    })
+    .then(response => {
+      return response;
+    });
+  }
+  /* data() {
     return {
       posts: [{
         title: 'A new beginning!',
@@ -35,7 +45,7 @@ export default {
        }
       ]
     }
-  }
+  } */
 }
 </script>
 
