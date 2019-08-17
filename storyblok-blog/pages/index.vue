@@ -26,14 +26,16 @@ export default {
       starts_with: 'blog/'
     })
     .then(response => {
-      return response.data.stories.map(blogPost => {
+      return {
+        posts: response.data.stories.map(blogPost => {
         return {
           id: blogPost.slug,
           title : blogPost.content.title,
           previewText: blogPost.content.summary,
           thumbnailUrl: blogPost.content.thumbnail
         }
-      });
+      })
+      };
     });
   }
   /* data() {
