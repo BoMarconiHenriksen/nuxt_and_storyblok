@@ -1,3 +1,4 @@
+const axios = require('axios');
 
 export default {
   mode: 'universal',
@@ -39,6 +40,24 @@ export default {
     ? 'IyVK80fqrW62n8HvjiUQ9gtt' 
     : 'BRsQNl5OqNVPbZrcepAN5Att', cacheProvider: "memory" } ]
   ],
+
+  // Which dynamic routes should be genereted for prerendered sites.
+  generate: {
+    routes: function() {
+      // We fetch our routes from Storyblok.
+      return axios.get('https://api.storyblok.com/v1/cdn/stories?version=published&token=IyVK80fqrW62n8HvjiUQ9gtt&starts_with=blog&cv=' 
+      + Math.floor(Date.now() / 1e3)
+      ).then(response => {
+        const blogPosts = response.data.stories.map(blogPost => blogPost.full_slug);
+        return [
+          '/',
+          '/blog',
+          '/about',
+          ...blogPosts
+        ]
+      })
+    }
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
