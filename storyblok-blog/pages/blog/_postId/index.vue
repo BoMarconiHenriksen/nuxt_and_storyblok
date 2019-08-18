@@ -14,7 +14,7 @@ export default {
     asyncData(context) {
         // We want to get the specific element from Storyblok creating a dynamic page.
         return context.app.$storyapi.get('cdn/stories/blog/' + context.params.postId, {
-            version: 'draft'
+            version: process.env.NODE_ENV == 'production' ? 'published' : 'draft'
         }).then(response => {
             return {
                 blok: response.data.story.content,

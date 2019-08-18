@@ -22,7 +22,8 @@ export default {
   asyncData(context) {
     return context.app.$storyapi
     .get('cdn/stories', {
-      version: 'draft',
+      // Is true if we are in developermode.  
+      version: context.isDev ? 'draft' : 'published',
       starts_with: 'blog/'
     })
     .then(response => {
