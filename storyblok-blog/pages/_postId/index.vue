@@ -1,5 +1,5 @@
 <template>
-    <div id="post">
+    <div id="post" v-editable="blok">
         <div class="post-thumbnail" :style="{ backgroundImage: 'url(' + image + ')' }"></div>
         <section class="post-content">
             <h1>{{ title }}</h1>
@@ -17,10 +17,23 @@ export default {
             version: 'draft'
         }).then(response => {
             return {
+                blok: response.data.story.content,
                 image: response.data.story.content.thumbnail,
                 title: response.data.story.content.title,
                 content: response.data.story.content.content
             };
+        });
+    },
+    mounted() {
+        // Initialize the project so we can live edit.
+        this.$storybridge.on(['input', 'published', 'change'], (event) => {
+        if (event.action == 'input') {
+            if (event.story.id === this.story.id) {
+            this.story.content = event.story.content
+            }
+        } else {
+            window.location.reload()
+        }
         });
     }
 }
